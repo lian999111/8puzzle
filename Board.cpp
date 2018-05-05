@@ -1,8 +1,3 @@
 #include "Board.h"
 
-
-
-Board::Board() {}
-
-
-Board::~Board() {}
+Board::Board(std::vector<std::vector<int>> blocks) {}
