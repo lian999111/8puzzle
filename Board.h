@@ -49,7 +49,7 @@ public:
 	// Returns a board that is obtained by exchanging any pair of blocks
 	//	Output:
 	//		a board that is obtained by exchanging any pair of blocks
-	//Board Twin() const;
+	Board Twin() const;
 
 	// Checks if this board equals to the given board
 	//	Input:

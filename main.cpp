@@ -29,4 +29,8 @@ int main() {
 		cout << "Yes." << endl;
 	else
 		cout << "No." << endl;
+
+	cout << endl;
+	cout << "The twin:" << endl;
+	cout << board.Twin();
 }

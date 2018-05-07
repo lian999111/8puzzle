@@ -81,4 +81,25 @@ bool Board::IsGoal() const {
 	return true;
 }
 
+Board Board::Twin() const {
+	auto blocks_copy = this->blocks_;
+	
+	int last_value = blocks_copy[0][0];
+	int curr_value{ 0 };
+
+	// The way of swapping is hard-coded, but it shall cover all the possible cases
+	// Done by checking whether one of the first two blocks is 0 and taking the corresponding measure
+	if (blocks_copy[0][0] == 0) {
+		std::swap(blocks_copy[1][0], blocks_copy[0][1]);
+	}
+	else if (blocks_copy[0][1] == 0) {
+		std::swap(blocks_copy[0][0], blocks_copy[1][0]);
+	}
+	else {
+		std::swap(blocks_copy[0][0], blocks_copy[0][1]);
+	}
+
+	return Board(blocks_copy);
+}
+
 
