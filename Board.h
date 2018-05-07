@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <utility>
 
 class Board {
 private:
@@ -16,6 +17,22 @@ private:
 
 	// Computes the manhattan cost
 	void Manhattan() const;
+
+	// This ctor is for Neighbor()'s use. It allows directly assigning the manhattan cost
+	// which can be computed fast inside Neighbor() by considering only the block be moved
+	//	Input:
+	//		blocks: a vector representing the board
+	//		prev_manhattan: the manhattan cost of its parent board
+	Board(const std::vector<std::vector<int>>& blocks, int manhatten_cost);
+
+	// Moves a block adjacent to the blank to the position of blank and returns the goal indices of the block
+	// This method does NOT modify the object of itself. Instead, it's an utility method used in Neighbor() to 
+	// move the block of a copied 2-D vector that is used to construct a new Board.
+	//	Input:
+	//		blocks: a 2-D vector representing the content of a board
+	//		blank_indices: a pair of int representing the indices of the blank
+	//		block_indices: a pair of int representing the indices of the block
+	std::pair<int, int> MoveBlock(std::vector<std::vector<int>>& blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const;
 
 public:
 	// Constructor
@@ -63,7 +80,7 @@ public:
 	//		board: a board to compare with
 	//	Output:
 	//		true if the boards are equal
-	//std::vector<Board> neighbors() const;
+	std::vector<Board> Neighbors() const;
 
 	// Operator << overloading
 	friend std::ostream& operator<<(std::ostream& out, const Board& board) {

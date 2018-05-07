@@ -9,14 +9,14 @@ int main() {
 	int dim{ 4 };
 
 	vector<vector<int>> b(dim, vector<int>(dim, 0));
-	for (int i = 0, tile = 1; i < dim; ++i) {
+	for (int i = 0, tile = 0; i < dim; ++i) {
 		for (int j = 0; j < dim; ++j) {
 			b[i][j] = tile;
 			++tile;
 		}
 	}
 
-	b[3][3] = 0;
+	//b[3][3] = 0;
 
 	Board board(b);
 
@@ -61,4 +61,9 @@ int main() {
 	catch (const exception& e) {
 		cout << e.what() << endl;
 	}
+
+	// Test Neighbor()
+	vector<vector<int>> b_1 = { {3, 0, 1}, {2, 4, 5}, {6, 7, 8} };
+	Board board_2(b_1);
+	auto neighbors = board_2.Neighbors();
 }

@@ -7,6 +7,32 @@ Board::Board(const std::vector<std::vector<int>>& blocks)
 	, dimension_(blocks.size())
 {}
 
+Board::Board(const std::vector<std::vector<int>>& blocks, int manhattan_cost) 
+	: blocks_(blocks.size() > 1 ? blocks : throw std::invalid_argument("A board must have more than 1 block."))
+	, dimension_(blocks.size())
+	, manhattan_cost_(manhattan_cost)
+{}
+
+std::pair<int, int> Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const{
+	// The block to be swapped with the blank
+	int block_row = block_indices.first;
+	int block_col = block_indices.second;
+	const int& block = copy_blocks[block_row][block_col];
+
+	// The indices of the blank
+	int blank_row = blank_indices.first;
+	int blank_col = blank_indices.second;
+
+	// The indices of the goal of the block
+	int goal_row = (block - 1) / blocks_.size();
+	int goal_col = (block - 1) % blocks_.size();
+
+	// Swap the block with the blank
+	std::swap(copy_blocks[blank_row][blank_col], copy_blocks[block_row][block_col]);
+
+	return std::make_pair(goal_row, goal_col);
+}
+
 int Board::GetDimension() const {
 	return dimension_;
 }
@@ -117,6 +143,114 @@ bool Board::operator==(const Board & rhs) const {
 	}
 
 	return true;
+}
+
+std::vector<Board> Board::Neighbors() const {
+	std::vector<Board> neighbors;
+	
+	// Find the blank block
+	int blank_row{ 0 }, blank_col{ 0 };
+
+	for (std::vector<int>::size_type i = 0; i < blocks_.size(); ++i) {
+		for (std::vector<int>::size_type j = 0; j < blocks_[i].size(); ++j) {
+			if (blocks_[i][j] == 0) {
+				blank_row = i;
+				blank_col = j;
+				// Breaking out of nested loops is one of few examples where "goto" is useful - by Stroustrup 
+				goto loop_end;
+			}
+		}
+	}
+loop_end:
+
+	// When the blank is not on the top edge
+	if (blank_row > 0) {
+		auto copy_blocks = this->blocks_;
+
+		// The indices of the block to be swapped with the blank
+		int block_row = blank_row - 1;
+		int block_col = blank_col;
+
+		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
+		int goal_row = goal_indices.first;
+		int goal_col = goal_indices.second;
+
+		// If new place is nearer to the goal place, decrement the manhattan cost by 1
+		if (abs(blank_row - goal_row) < abs(block_row - goal_row)) {
+			// emplace_back cannot be used here since the ctor used here is private
+			// thus the allocator cannot access the ctor to construct the Board object in-place
+			// for further reference: https://stackoverflow.com/questions/17007977/vectoremplace-back-for-objects-with-a-private-constructor/17008204?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
+		}
+		else {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() + 1));
+		}
+	}
+
+	// When the blank is not on the bottom edge
+	if (blank_row < (this->blocks_.size() - 1)) {
+		auto copy_blocks = this->blocks_;
+
+		// The indices of the block to be swapped with the blank
+		int block_row = blank_row + 1;
+		int block_col = blank_col;
+		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
+
+		int goal_row = goal_indices.first;
+		int goal_col = goal_indices.second;
+
+		// If new place is nearer to the goal place, decrement the manhattan cost by 1
+		if (abs(blank_row - goal_row) < abs(block_row - goal_row)) {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
+		}
+		else {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() + 1));
+		}
+	}
+
+	// When the blank is not on the left edge
+	if (blank_col > 0) {
+		auto copy_blocks = this->blocks_;
+
+		// The indices of the block to be swapped with the blank
+		int block_row = blank_row;
+		int block_col = blank_col - 1;
+
+		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
+		int goal_row = goal_indices.first;
+		int goal_col = goal_indices.second;
+
+		// If new place is nearer to the goal place, decrement the manhattan cost by 1
+		if (abs(blank_col - goal_col) < abs(block_col - goal_col)) {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
+		}
+		else {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() + 1));
+		}
+	}
+
+	// When the blank is not on the right edge
+	if (blank_col < (this->blocks_.size() - 1)) {
+		auto copy_blocks = this->blocks_;
+
+		// The indices of the block to be swapped with the blank
+		int block_row = blank_row;
+		int block_col = blank_col + 1;
+
+		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
+		int goal_row = goal_indices.first;
+		int goal_col = goal_indices.second;
+
+		// If new place is nearer to the goal place, decrement the manhattan cost by 1
+		if (abs(blank_col - goal_col) < abs(block_col - goal_col)) {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
+		}
+		else {
+			neighbors.push_back(Board(copy_blocks, this->GetManhattan() + 1));
+		}
+	}
+	
+	return neighbors;
 }
 
 
