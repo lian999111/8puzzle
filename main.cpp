@@ -20,8 +20,6 @@ int main() {
 
 	cout << board << endl;
 	cout << "The hamming cost: " << board.GetHamming() << endl;
-
-		
-			
+	cout << "The manhattan cost: " << board.GetManhattan() << endl;
 
 }

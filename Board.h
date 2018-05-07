@@ -14,6 +14,9 @@ private:
 	// Computes the hamming cost and save it in the instance variable
 	void Hamming() const;
 
+	// Computes the manhattan cost
+	void Manhattan() const;
+
 public:
 	// Constructor
 	//	 Input:
@@ -33,10 +36,10 @@ public:
 	//		the hamming cost of the board
 	int GetHamming() const;
 
-	// Computes the manhattan cost
+	// Gets the manhattan cost of the board
 	//	Output:
-	//		the manhattan cost
-	//int Manhattan() const;
+	//		the manhattn cost of the board
+	int GetManhattan() const;
 
 	// Checks if the board has reached the goad
 	//	Output:
