@@ -13,7 +13,7 @@ int Board::Hamming() const {
 	int cost{ 0 };
 	int count = 1;
 	for (auto&& row : blocks_) {
-		for (auto&& tile : row) {
+		for (const auto& tile : row) {
 			if (tile != count)
 				++cost;
 			++count;
