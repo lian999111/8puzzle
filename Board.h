@@ -11,9 +11,7 @@ private:
 	mutable int hamming_cost_{ -1 };
 	mutable int manhattan_cost_{ 0 };
 
-	// Computes the hamming cost
-	//	Output:
-	//		the hamming cost
+	// Computes the hamming cost and save it in the instance variable
 	void Hamming() const;
 
 public:
@@ -30,6 +28,9 @@ public:
 	//		the dimension of the board
 	int GetDimension() const;
 
+	// Gets the hamming cost of the board
+	//	Output:
+	//		the hamming cost of the board
 	int GetHamming() const;
 
 	// Computes the manhattan cost
