@@ -9,7 +9,7 @@ int Board::GetDimension() const {
 	return dimension_;
 }
 
-int Board::Hamming() const {
+void Board::Hamming() const {
 	int cost{ 0 };
 	int count = 1;
 	for (auto&& row : blocks_) {
@@ -20,7 +20,15 @@ int Board::Hamming() const {
 		}
 	}
 	// Since 0 doesn't count as a tile, the cost caused by it must be subtracted
-	return cost - 1;
+	hamming_cost_ = cost - 1;
+}
+
+int Board::GetHamming() const {
+	if (hamming_cost_ < 0) {
+		Hamming();
+	}
+
+	return hamming_cost_;
 }
 
 

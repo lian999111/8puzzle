@@ -19,7 +19,7 @@ int main() {
 	Board board(b);
 
 	cout << board << endl;
-	cout << "The hamming cost: " << board.Hamming() << endl;
+	cout << "The hamming cost: " << board.GetHamming() << endl;
 
 		
 			

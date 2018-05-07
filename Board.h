@@ -7,7 +7,14 @@
 class Board {
 private:
 	std::vector<std::vector<int>> blocks_;
-	int dimension_{ 0 };
+	const int dimension_{ 0 };
+	mutable int hamming_cost_{ -1 };
+	mutable int manhattan_cost_{ 0 };
+
+	// Computes the hamming cost
+	//	Output:
+	//		the hamming cost
+	void Hamming() const;
 
 public:
 	// Constructor
@@ -23,10 +30,7 @@ public:
 	//		the dimension of the board
 	int GetDimension() const;
 
-	// Computes the hamming cost
-	//	Output:
-	//		the hamming cost
-	int Hamming() const;
+	int GetHamming() const;
 
 	// Computes the manhattan cost
 	//	Output:
@@ -59,7 +63,7 @@ public:
 
 	// Operator << overloading
 	friend std::ostream& operator<<(std::ostream& out, const Board& board) {
-		out << board.dimension_ << '\n';
+		out << "Dim: " << board.dimension_ << '\n';
 		for (auto&& row : board.blocks_) {
 			for (auto&& tile : row) {
 				out << std::setw(3) << std::right << tile;
