@@ -56,7 +56,7 @@ public:
 	//		board: a board to compare with
 	//	Output:
 	//		true if the boards are equal
-	//bool Equals(const Board& board) const;
+	bool operator==(const Board& rhs) const;
 
 	// Returns a vector of neighbor boards
 	//	Input:

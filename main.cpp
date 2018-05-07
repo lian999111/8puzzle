@@ -30,9 +30,18 @@ int main() {
 	else
 		cout << "No." << endl;
 
+	// Test Twin()
 	cout << endl;
 	cout << "The twin:" << endl;
 	cout << board.Twin();
+
+	// Test operator==
+	cout << endl;
+	cout << "The board and the twin are the same? ";
+	if (board == board.Twin())
+		cout << "Yes." << endl;
+	else
+		cout << "No." << endl;
 
 	// Test a board with only 1 tile
 	cout << endl;

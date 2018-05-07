@@ -103,4 +103,20 @@ Board Board::Twin() const {
 	return Board(blocks_copy);
 }
 
+bool Board::operator==(const Board & rhs) const {
+
+	if (this->dimension_ != rhs.dimension_)
+		return false;
+
+	for (std::vector<int>::size_type i = 0; i < blocks_.size(); ++i) {
+		for (std::vector<int>::size_type j = 0; j < blocks_[i].size(); ++j) {
+			if (this->blocks_[i][j] != rhs.blocks_[i][j]) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 
