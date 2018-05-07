@@ -65,8 +65,8 @@ public:
 	// Operator << overloading
 	friend std::ostream& operator<<(std::ostream& out, const Board& board) {
 		out << "Dim: " << board.dimension_ << '\n';
-		for (auto&& row : board.blocks_) {
-			for (auto&& tile : row) {
+		for (const auto& row : board.blocks_) {
+			for (const auto& tile : row) {
 				out << std::setw(3) << std::right << tile;
 			}
 			out << '\n';
