@@ -14,7 +14,7 @@ Board::Board(const std::vector<std::vector<int>>& blocks, int manhattan_cost)
 	, manhattan_cost_(manhattan_cost)
 {}
 
-std::pair<int, int> Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const{
+bool Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const{
 	// The block to be swapped with the blank
 	int block_row = block_indices.first;
 	int block_col = block_indices.second;
@@ -31,7 +31,8 @@ std::pair<int, int> Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks,
 	// Swap the block with the blank
 	std::swap(copy_blocks[blank_row][blank_col], copy_blocks[block_row][block_col]);
 
-	return std::make_pair(goal_row, goal_col);
+	// Return if the block gets closer to its goal
+	return abs(blank_col - goal_col) < abs(block_col - goal_col);
 }
 
 int Board::GetDimension() const {
@@ -54,21 +55,21 @@ void Board::Hamming() const {
 
 void Board::Manhattan() const {
 	int cost{ 0 };
-	int tile{ 0 };
-	int goal_idx_i{ 0 }, goal_idx_j{ 0 };
+	int block{ 0 };
+	int goal_row{ 0 }, goal_col{ 0 };
 
 	for (std::vector<int>::size_type i = 0; i < blocks_.size(); ++ i) {
 		for (std::vector<int>::size_type j = 0; j < blocks_[i].size(); ++j) {
-			tile = blocks_[i][j];
+			block = blocks_[i][j];
 
 			// Since 0 doesn't count as a tile
-			if (tile == 0) {
+			if (block == 0) {
 				continue;
 			}
 
-			goal_idx_i = (tile - 1) / blocks_.size();
-			goal_idx_j = (tile - 1) % blocks_.size();
-			cost += abs(static_cast<int>(i - goal_idx_i)) + abs(static_cast<int>(j - goal_idx_j));
+			goal_row = (block - 1) / blocks_.size();
+			goal_col = (block - 1) % blocks_.size();
+			cost += abs(static_cast<int>(i - goal_row)) + abs(static_cast<int>(j - goal_col));
 		}
 	}
 	
@@ -172,12 +173,10 @@ loop_end:
 		int block_row = blank_row - 1;
 		int block_col = blank_col;
 
-		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
-		int goal_row = goal_indices.first;
-		int goal_col = goal_indices.second;
+		bool is_closer = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
 
 		// If new place is nearer to the goal place, decrement the manhattan cost by 1
-		if (abs(blank_row - goal_row) < abs(block_row - goal_row)) {
+		if (is_closer) {
 			// emplace_back cannot be used here since the ctor used here is private
 			// thus the allocator cannot access the ctor to construct the Board object in-place
 			// for further reference: https://stackoverflow.com/questions/17007977/vectoremplace-back-for-objects-with-a-private-constructor/17008204?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
@@ -195,13 +194,11 @@ loop_end:
 		// The indices of the block to be swapped with the blank
 		int block_row = blank_row + 1;
 		int block_col = blank_col;
-		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
 
-		int goal_row = goal_indices.first;
-		int goal_col = goal_indices.second;
+		bool is_closer = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
 
 		// If new place is nearer to the goal place, decrement the manhattan cost by 1
-		if (abs(blank_row - goal_row) < abs(block_row - goal_row)) {
+		if (is_closer) {
 			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
 		}
 		else {
@@ -217,12 +214,10 @@ loop_end:
 		int block_row = blank_row;
 		int block_col = blank_col - 1;
 
-		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
-		int goal_row = goal_indices.first;
-		int goal_col = goal_indices.second;
+		bool is_closer = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
 
 		// If new place is nearer to the goal place, decrement the manhattan cost by 1
-		if (abs(blank_col - goal_col) < abs(block_col - goal_col)) {
+		if (is_closer) {
 			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
 		}
 		else {
@@ -238,12 +233,10 @@ loop_end:
 		int block_row = blank_row;
 		int block_col = blank_col + 1;
 
-		auto goal_indices = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
-		int goal_row = goal_indices.first;
-		int goal_col = goal_indices.second;
+		bool is_closer = MoveBlock(copy_blocks, std::make_pair(blank_row, blank_col), std::make_pair(block_row, block_col));
 
 		// If new place is nearer to the goal place, decrement the manhattan cost by 1
-		if (abs(blank_col - goal_col) < abs(block_col - goal_col)) {
+		if (is_closer) {
 			neighbors.push_back(Board(copy_blocks, this->GetManhattan() - 1));
 		}
 		else {

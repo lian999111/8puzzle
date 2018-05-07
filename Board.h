@@ -32,7 +32,10 @@ private:
 	//		blocks: a 2-D vector representing the content of a board
 	//		blank_indices: a pair of int representing the indices of the blank
 	//		block_indices: a pair of int representing the indices of the block
-	std::pair<int, int> MoveBlock(std::vector<std::vector<int>>& blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const;
+	// Output:
+	//		blocks: 2 blocks of the 2-D vector are swapped internally
+	//		An boolean indicating whether the moved block gets closer to its goal
+	bool MoveBlock(std::vector<std::vector<int>>& blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const;
 
 public:
 	// Constructor
