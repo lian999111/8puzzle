@@ -7,6 +7,7 @@ Board::Board(const std::vector<std::vector<int>>& blocks)
 	, dimension_(blocks.size())
 {}
 
+// This is a private ctor for Neighbors()'s internal use
 Board::Board(const std::vector<std::vector<int>>& blocks, int manhattan_cost) 
 	: blocks_(blocks.size() > 1 ? blocks : throw std::invalid_argument("A board must have more than 1 block."))
 	, dimension_(blocks.size())
