@@ -9,7 +9,7 @@ private:
 	std::vector<std::vector<int>> blocks_;
 	const int dimension_{ 0 };
 	mutable int hamming_cost_{ -1 };
-	mutable int manhattan_cost_{ 0 };
+	mutable int manhattan_cost_{ -1 };
 
 	// Computes the hamming cost and save it in the instance variable
 	void Hamming() const;
