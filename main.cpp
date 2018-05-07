@@ -33,4 +33,23 @@ int main() {
 	cout << endl;
 	cout << "The twin:" << endl;
 	cout << board.Twin();
+
+	// Test a board with only 1 tile
+	cout << endl;
+	cout << "Test a board with only 1 tile: " << endl;
+	dim = 1;
+	vector<vector<int>> b_wrong(dim, vector<int>(dim, 0));
+	for (int i = 0, tile = 1; i < dim; ++i) {
+		for (int j = 0; j < dim; ++j) {
+			b[i][j] = tile;
+			++tile;
+		}
+	}
+
+	try {
+		Board board_1(b_wrong);
+	}
+	catch (const exception& e) {
+		cout << e.what() << endl;
+	}
 }

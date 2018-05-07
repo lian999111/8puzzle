@@ -1,8 +1,9 @@
 #include "Board.h"
 #include <cstdlib>
+#include <exception>
 
 Board::Board(const std::vector<std::vector<int>>& blocks)
-	: blocks_(blocks)
+	: blocks_(blocks.size() > 1 ? blocks : throw std::invalid_argument("A board must have more than 1 block."))
 	, dimension_(blocks.size())
 {}
 
