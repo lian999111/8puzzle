@@ -44,7 +44,7 @@ public:
 	// Checks if the board has reached the goad
 	//	Output:
 	//		true if is goal
-	//bool IsGoal() const;
+	bool IsGoal() const;
 
 	// Returns a board that is obtained by exchanging any pair of blocks
 	//	Output:

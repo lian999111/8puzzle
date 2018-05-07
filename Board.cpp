@@ -63,4 +63,22 @@ int Board::GetManhattan() const {
 	return manhattan_cost_;
 }
 
+bool Board::IsGoal() const {
+	int goal_tile = 1;
+
+	for (const auto& row : blocks_) {
+		for (const auto& tile : row) {
+			if (tile != goal_tile)
+				return false;
+			
+			++goal_tile;
+			// The last block is zero and should not be used to check if the goal is reached
+			if (goal_tile == blocks_.size() * blocks_.size())
+				break;
+		}
+	}
+
+	return true;
+}
+
 
