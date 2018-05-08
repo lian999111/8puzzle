@@ -8,13 +8,13 @@ Board::Board(const std::vector<std::vector<int>>& blocks)
 {}
 
 // This is a private ctor for Neighbors()'s internal use
-Board::Board(const std::vector<std::vector<int>>& blocks, int manhattan_cost) 
+Board::Board(const std::vector<std::vector<int>>& blocks, const int& parent_manhatten_cost)
 	: blocks_(blocks.size() > 1 ? blocks : throw std::invalid_argument("A board must have more than 1 block."))
 	, dimension_(blocks.size())
-	, manhattan_cost_(manhattan_cost)
+	, manhattan_cost_(parent_manhatten_cost)
 {}
 
-bool Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const{
+bool Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, const std::pair<int, int>& blank_indices, const std::pair<int, int>& block_indices) const{
 	// The block to be swapped with the blank
 	int block_row = block_indices.first;
 	int block_col = block_indices.second;

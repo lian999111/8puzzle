@@ -23,7 +23,7 @@ private:
 	//	Input:
 	//		blocks: a vector representing the board
 	//		prev_manhattan: the manhattan cost of its parent board
-	Board(const std::vector<std::vector<int>>& blocks, int manhatten_cost);
+	Board(const std::vector<std::vector<int>>& blocks, const int& parent_manhatten_cost);
 
 	// Moves a block adjacent to the blank to the position of blank and returns the goal indices of the block
 	// This method does NOT modify the object of itself. Instead, it's an utility method used in Neighbor() to 
@@ -35,7 +35,7 @@ private:
 	// Output:
 	//		blocks: 2 blocks of the 2-D vector are swapped internally
 	//		An boolean indicating whether the moved block gets closer to its goal
-	bool MoveBlock(std::vector<std::vector<int>>& blocks, std::pair<int, int> blank_indices, std::pair<int, int> block_indices) const;
+	bool MoveBlock(std::vector<std::vector<int>>& blocks, const std::pair<int, int>& blank_indices, const std::pair<int, int>& block_indices) const;
 
 public:
 	// Constructor
