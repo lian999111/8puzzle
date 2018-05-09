@@ -5,10 +5,13 @@
 
 class Solver {
 private:
-	int moves_{ -1 };
-	std::vector<Board> solution_;
+	const Board init_board_;
+	mutable int num_of_moves_{ -1 };
+	mutable std::vector<Board> solution_;
+	mutable bool is_solvable_{ true };
 
-	class SearchNode;
+	struct SearchNode;
+	struct NodesComparator;
 
 public:
 	// Constructor
@@ -22,16 +25,16 @@ public:
 	// Getter of the number of moves to solve the board
 	//	Output:
 	//		The number of moves
-	int GetMoves();
+	//int GetMoves();
 
 	// Getter of the solution sequence
 	//	Output:
 	//		A vector consisting of a sequence of boards following which the board can be solved
-	std::vector<Board> GetSolution();
+	std::vector<Board> GetSolution() const;
 
 	// Returns whether the initial board is solvable
 	//	Output:
 	//		A boolean indicating the initial board can be solved
-	bool IsSolvable();
+	bool IsSolvable() const;
 };
 
