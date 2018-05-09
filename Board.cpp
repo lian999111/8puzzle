@@ -32,7 +32,15 @@ bool Board::MoveBlock(std::vector<std::vector<int>>& copy_blocks, const std::pai
 	std::swap(copy_blocks[blank_row][blank_col], copy_blocks[block_row][block_col]);
 
 	// Return if the block gets closer to its goal
-	return abs(blank_col - goal_col) < abs(block_col - goal_col);
+	if (abs(blank_row - goal_row) < abs(block_row - goal_row)) {
+		return true;
+	}
+	else if (abs(blank_col - goal_col) < abs(block_col - goal_col)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 int Board::GetDimension() const {
