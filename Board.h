@@ -8,7 +8,7 @@
 class Board {
 private:
 	std::vector<std::vector<int>> blocks_;
-	const int dimension_{ 0 };
+	int dimension_{ 0 };
 	mutable int hamming_cost_{ -1 };
 	mutable int manhattan_cost_{ -1 };
 
@@ -43,8 +43,7 @@ public:
 	//		blocks: a vector representing the board
 	explicit Board(const std::vector<std::vector<int>>& blocks);
 
-	// Destructor
-	~Board() = default;
+	// Copy ctor, Move ctor, Copy assignment, Move assignment, Destructor are declared implicitly
 
 	// Gets the dimension of the board
 	//	Output:
