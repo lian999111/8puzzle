@@ -16,7 +16,6 @@ struct Solver::SearchNode {
 	//
 	//	In this assignment, the heuristic is said to be both admissible and consistent. That is,
 	//	the first seach node that corresponds to the goal is exactly the shortest way to get it.
-	//	For this reason, here only an observing raw pointer is needed to track the sequence.
 	
 	SearchNode() = default;
 
@@ -28,6 +27,7 @@ struct Solver::SearchNode {
 	{}
 };
 
+// This functor is for the min PQ
 struct Solver::NodesComparator {
 	bool operator()(const SearchNode& lhs, const SearchNode& rhs) {
 		if (lhs.total_cost_manhattan > rhs.total_cost_manhattan) {
@@ -78,10 +78,21 @@ Solver::Solver(const Board& board)
 		std::vector<Board> neighbor_boards = curr_node.board.Neighbors();
 
 		for (const auto& new_board : neighbor_boards) {
+			// Dispose of the boards that duplicate their grand parents
 			if (curr_node.p_parent_node != nullptr && new_board == curr_node.p_parent_node->board) {
 				continue;
 			}
+
+			// Note:
+			// Every node made shared is pointed to by at least a child
+			// The children are added into and managed by the priority queue immediately.
+			// When a node is popped from the PQ, its children will again be generated and
+			// placed into the PQ. Thus, the nodes are guaranteed to be held alive throughout 
+			// the constructor. After the curr_node and the pq is out of scope, the nodes will
+			// be automatically deleted due to the use of shared_ptr.
 			min_pq.emplace(new_board, curr_node.num_of_moves + 1, p_curr_node);
+
+			// When debugging, could be a good idea to use a vector to track all the explored nodes
 		}
 	}
 
