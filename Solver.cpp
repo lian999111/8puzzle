@@ -102,7 +102,11 @@ Solver::Solver(const Board& board)
 
 }
 
-std::vector<Board> Solver::GetSolution() const {
+int Solver::GetMoves() const {
+	return num_of_moves_;
+}
+
+const std::vector<Board>& Solver::GetSolution() const {
 	return solution_;
 }
 

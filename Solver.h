@@ -25,12 +25,12 @@ public:
 	// Getter of the number of moves to solve the board
 	//	Output:
 	//		The number of moves
-	//int GetMoves();
+	int GetMoves() const;
 
 	// Getter of the solution sequence
 	//	Output:
 	//		A vector consisting of a sequence of boards following which the board can be solved
-	std::vector<Board> GetSolution() const;
+	const std::vector<Board>& GetSolution() const;
 
 	// Returns whether the initial board is solvable
 	//	Output:
