@@ -1,6 +1,9 @@
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "Board.h"
+#include "Solver.h"
 
 int main() {
 	using namespace std;
@@ -8,15 +11,7 @@ int main() {
 	// Test the board class
 	int dim{ 4 };
 
-	vector<vector<int>> b(dim, vector<int>(dim, 0));
-	for (int i = 0, block = 0; i < dim; ++i) {
-		for (int j = 0; j < dim; ++j) {
-			b[i][j] = block;
-			++block;
-		}
-	}
-
-	//b[3][3] = 0;
+	vector<vector<int>> b = { { 5, 3, 1, 4 },{ 10, 2, 8, 7 },{ 14, 13, 0, 11 }, { 6, 9, 15, 12 } };
 
 	Board board(b);
 
@@ -46,14 +41,7 @@ int main() {
 	// Test a board with only 1 tile
 	cout << endl;
 	cout << "Test a board with only 1 tile: " << endl;
-	dim = 1;
-	vector<vector<int>> b_wrong(dim, vector<int>(dim, 0));
-	for (int i = 0, tile = 1; i < dim; ++i) {
-		for (int j = 0; j < dim; ++j) {
-			b[i][j] = tile;
-			++tile;
-		}
-	}
+	vector<vector<int>> b_wrong{ {{0}} };
 
 	try {
 		Board board_1(b_wrong);
@@ -63,12 +51,50 @@ int main() {
 	}
 
 	// Test Neighbor()
-	vector<vector<int>> b_1 = { {3, 0, 1}, {2, 4, 5}, {6, 7, 8} };
+	vector<vector<int>> b_1 = { { 1, 2, 3, 4 },{ 5, 6, 7, 8 },{ 10, 0, 11, 12 },{ 9, 13, 14, 15 } };
 	Board board_1(b_1);
 	auto neighbors = board_1.Neighbors();
 	cout << "board_2: \n" << board_1;
 	cout << "\nNeighbors of board_2: \n";
 	for (const auto neighbor : neighbors) {
 		cout << neighbor;
+	}
+
+	// Test Solver
+	string filename{ "data/puzzle36.txt" };
+	cout << "\nTest Solver on " << filename << endl;
+
+	ifstream file;
+	file.open(filename);
+
+	file >> dim;
+	vector<vector<int>> puzzle_from_file(dim, vector<int>(dim));
+
+	int block{ 0 };
+	for (int i = 0; i < dim; ++i) {
+		for (int j = 0; j < dim; ++j) {
+			file >> block;
+			puzzle_from_file[i][j] = block;
+		}
+	}
+
+	file.close();
+
+	Board test_board(puzzle_from_file);
+	cout << test_board;
+
+	Solver board_solver(test_board);
+
+	cout << "The board is ";
+	if (board_solver.IsSolvable())
+		cout << "solvable with " << board_solver.GetMoves() << " steps \n";
+	else
+		cout << "unsolvable \n";
+
+	cout << "\n Solution sequence: \n";
+
+	auto& solution = board_solver.GetSolution();
+	for (auto ite = solution.rbegin(); ite != solution.rend(); ++ite) {
+		cout << *ite;
 	}
 }
